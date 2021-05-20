@@ -14,6 +14,8 @@ export type MarkerHandlers = {
 
 interface MarkerOptions extends DGMarkerOptions {
    handlers?: MarkerHandlers;
+   throwDestroy?: (marker: DGMarker | null | undefined) => any;
+   throwCreate?: (marker: DGMarker | null | undefined) => any;
 }
 
 export function Marker(props: MarkerOptions): null {
@@ -31,6 +33,7 @@ export function Marker(props: MarkerOptions): null {
 
             if (props.icon) options.icon = props.icon;
             if (props.size) options.size = props.size;
+            if (props.label) options.label = props.label;
             marker = new mapgl.Marker(map, options);
 
             if (props.handlers) {
@@ -38,10 +41,22 @@ export function Marker(props: MarkerOptions): null {
                   marker.on(event, props.handlers![event]!);
                });
             }
+
+            if (props.throwCreate) {
+               props.throwCreate(marker);
+            }
          });
       }
 
-      return () => map && marker && marker.destroy();
+      return () => {
+         if (map && marker) {
+            marker.destroy();
+
+            if (props.throwDestroy) {
+               props.throwDestroy(marker);
+            }
+         }
+      }
    }, [ map, props.coordinates ]);
 
    return null;

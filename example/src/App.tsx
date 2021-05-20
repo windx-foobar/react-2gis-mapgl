@@ -1,4 +1,5 @@
 import React from 'react';
+import { Map as DGMap } from '@2gis/mapgl/types';
 import {
    ItisDGisContainer,
    MapHandlers,
@@ -12,6 +13,7 @@ import {
    allFigures
 } from 'itis-dgis';
 import { Bar } from './components/Debug/Bar';
+import CarMarkers from './components/CarMarkers';
 
 // Mocks
 import {
@@ -21,8 +23,16 @@ import {
    circles as _circles,
    polygons as _polygons,
    rectangles as _rectangles,
-   clusterMarkers as _clusterMarkers
+   clusterMarkers as _clusterMarkers,
+   carMarkers as _carMarkers
 } from './constants/mock';
+
+export interface CarMarkerPoint {
+   lat: number;
+   lng?: number;
+   lon?: number;
+   name: string;
+}
 
 function App(): JSX.Element {
    const [ markers, setMarkers ] = React.useState(_markers);
@@ -32,6 +42,7 @@ function App(): JSX.Element {
    const [ polygons, setPolygons ] = React.useState(_polygons);
    const [ rectangles, setRectangles ] = React.useState(_rectangles);
    const [ center, setCenter ] = React.useState(_map.center);
+   const [ carMarkers, setCarMarkers ] = React.useState(_carMarkers);
    const [ zoom, setZoom ] = React.useState(5);
 
    const [ drawManagerInit, setDrawManagerInit ] = React.useState(false);
@@ -40,8 +51,11 @@ function App(): JSX.Element {
 
    const mapHandlers = React.useMemo(
       (): MapHandlers => ({
-         click(e) {
-            console.log(e.lngLat);
+         zoomend(this: DGMap) {
+            setZoom(this.getZoom());
+         },
+         moveend(this: DGMap) {
+            setCenter(this.getCenter());
          }
       }),
       []
@@ -61,6 +75,7 @@ function App(): JSX.Element {
             setDrawManager={ setDrawManagerInit }
             setDrawManagerFigure={ setDrawManagerFigure }
             setDrawManagerData={ setDrawManagerData }
+            setCarMarkers={ setCarMarkers }
          />
          <ItisDGisContainer
             apiKey="ec3385df-fb03-4a76-89cb-84eb0362488c"
@@ -69,6 +84,7 @@ function App(): JSX.Element {
             center={ center }
             zoom={ zoom }
          >
+            <CarMarkers cars={ carMarkers } />
             { markers.map((marker) => (
                <Marker
                   coordinates={ marker }

@@ -1,4 +1,11 @@
 import { defaults } from 'itis-dgis/src/constants/defaults';
+import { CarMarkerPoint } from '../App';
+
+export const carMarkers: CarMarkerPoint[] = [
+   { lat: 51.0078163146973, lng: 58.4405479431152, name: 'в454сн 716' },
+   { lat: 53.1961936950684, lng: 48.3019905090332, name: 'В173СН 716' },
+   { lat: 55.1024017333984, lng: 68.0783081054687, name: 'В280СН 716' },
+];
 
 export const markers: number[][] = [
    [ 50.853422, 55.568584 ],
