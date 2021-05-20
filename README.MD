@@ -1,4 +1,4 @@
-# ITIS-NAVITEL
+# ITIS-DGIS
 
 Install
 
