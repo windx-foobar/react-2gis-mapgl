@@ -70,13 +70,25 @@ function ItisDGisContainer(props: ContainerProps): JSX.Element {
          // @ts-ignore
          setMap(_map);
       });
+
+      return () => {
+         if (_map) {
+            _map.destroy();
+         }
+
+         if (map) {
+            setMap(undefined);
+         }
+      }
    }, []);
 
    return (
       <ItisDGisProvider value={ [ map, setMap ] }>
-         <div className={ clsx(classes.mapContainer, {
-            fullSize: props.fullSize
-         }) }>
+         <div
+            className={ clsx(classes.mapContainer, {
+               fullSize: props.fullSize
+            }) }
+         >
             <ItisDGisMapContainer />
          </div>
          { props.handlers && (
