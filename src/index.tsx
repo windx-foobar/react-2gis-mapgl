@@ -32,6 +32,7 @@ interface ContainerProps {
    apiKey: string;
    children?: React.ReactNodeArray;
    handlers?: MapHandlers;
+   fullSize?: boolean;
 }
 
 const ItisDGisMapContainer = React.memo(
@@ -73,7 +74,9 @@ function ItisDGisContainer(props: ContainerProps): JSX.Element {
 
    return (
       <ItisDGisProvider value={ [ map, setMap ] }>
-         <div className={ classes.mapContainer }>
+         <div className={ clsx(classes.mapContainer, {
+            fullSize: props.fullSize
+         }) }>
             <ItisDGisMapContainer />
          </div>
          { props.handlers && (
