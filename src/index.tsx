@@ -1,6 +1,6 @@
 import React from 'react';
 import { load } from '@2gis/mapgl';
-import { Map as DGMap } from '@2gis/mapgl/types';
+import { Map as DGMap, ZoomControl as DGZoomControl } from '@2gis/mapgl/types';
 
 import { useDGisMap, ItisDGisProvider } from './contexts_hooks';
 import defaults from './constants/defaults';
@@ -33,6 +33,10 @@ interface ContainerProps {
    children?: React.ReactNodeArray;
    handlers?: MapHandlers;
    fullSize?: boolean;
+   hiddenCopy?: boolean;
+   centerControls?: boolean;
+   throwDestroy?: (map: DGMap | undefined) => any;
+   throwCreate?: (map: DGMap | undefined) => any;
 }
 
 const ItisDGisMapContainer = React.memo(
@@ -49,7 +53,7 @@ function ItisDGisContainer(props: ContainerProps): JSX.Element {
    const [ map, setMap ] = React.useState(undefined);
 
    React.useEffect(() => {
-      let _map: DGMap;
+      let _map: DGMap, zoomControl: DGZoomControl;
 
       if (!props.apiKey || !props.apiKey.length) {
          throw new Error('Api key is required prop value!');
@@ -65,7 +69,26 @@ function ItisDGisContainer(props: ContainerProps): JSX.Element {
             zoom: props.zoom ?? defaults.map.zoom,
             key: props.apiKey,
             lang: props.locale ?? defaults.map.lang,
+            zoomControl: false
          });
+
+         if (props.centerControls) {
+            zoomControl = new mapgl.ZoomControl(_map, {
+               position: 'topRight'
+            });
+
+            let $el: HTMLDivElement = zoomControl.getContainer();
+            // Центрируем контролсы зума +- по центру
+            $el.style.position = 'relative';
+            $el.style.bottom = props.fullSize ? '40vh' : '-30vh';
+
+            if (props.hiddenCopy) {
+               // Убираем копирайты 2гис
+               $el.parentElement?.nextElementSibling?.remove();
+            }
+         }
+
+         if (props.throwCreate) props.throwCreate(_map);
 
          // @ts-ignore
          setMap(_map);
@@ -79,6 +102,8 @@ function ItisDGisContainer(props: ContainerProps): JSX.Element {
          if (map) {
             setMap(undefined);
          }
+
+         if (props.throwDestroy) props.throwDestroy(_map);
       }
    }, []);
 

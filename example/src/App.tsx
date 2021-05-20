@@ -44,6 +44,7 @@ function App(): JSX.Element {
    const [ center, setCenter ] = React.useState(_map.center);
    const [ carMarkers, setCarMarkers ] = React.useState(_carMarkers);
    const [ zoom, setZoom ] = React.useState(5);
+   const [ showMap, setShowMap ] = React.useState(true);
 
    const [ drawManagerInit, setDrawManagerInit ] = React.useState(false);
    const [ drawManagerFigure, setDrawManagerFigure ] = React.useState(allFigures.Circle);
@@ -77,61 +78,67 @@ function App(): JSX.Element {
             setDrawManagerData={ setDrawManagerData }
             setCarMarkers={ setCarMarkers }
          />
-         <ItisDGisContainer
-            apiKey="ec3385df-fb03-4a76-89cb-84eb0362488c"
-            handlers={ mapHandlers }
-            locale="ru"
-            center={ center }
-            zoom={ zoom }
-         >
-            <CarMarkers cars={ carMarkers } />
-            { markers.map((marker) => (
-               <Marker
-                  coordinates={ marker }
-                  key={ marker[0] + marker[1] }
+         { showMap && (
+            <ItisDGisContainer
+               apiKey="ec3385df-fb03-4a76-89cb-84eb0362488c"
+               handlers={ mapHandlers }
+               locale="ru"
+               center={ center }
+               zoom={ zoom }
+               hiddenCopy
+               centerControls
+               throwDestroy={ (map) => console.log(map) }
+               throwCreate={ (map) => console.log(map) }
+            >
+               <CarMarkers cars={ carMarkers } />
+               { markers.map((marker) => (
+                  <Marker
+                     coordinates={ marker }
+                     key={ marker[0] + marker[1] }
+                  />
+               )) }
+               { polylines.map(polyline => (
+                  <Polyline
+                     coordinates={ polyline }
+                     key={ polyline.toString() }
+                  />
+               )) }
+               { circles.map(circle => (
+                  <Circle
+                     coordinates={ circle.coordinates }
+                     radius={ circle.radius }
+                     key={ circle.coordinates[0] + circle.radius }
+                  />
+               )) }
+               { polygons.map(polygon => (
+                  <Polygon
+                     coordinates={ polygon }
+                     key={ polygon.toString() }
+                  />
+               )) }
+               { rectangles.map(rectangle => (
+                  <Rectangle
+                     southWest={ rectangle.southWest }
+                     northEast={ rectangle.northEast }
+                     key={ rectangle.southWest[0] + rectangle.northEast[0] }
+                  />
+               )) }
+               <Cluster
+                  radius={ 80 }
+                  markers={
+                     clusterMarkers.map((marker) => (
+                        { coordinates: marker }
+                     ))
+                  }
                />
-            )) }
-            { polylines.map(polyline => (
-               <Polyline
-                  coordinates={ polyline }
-                  key={ polyline.toString() }
-               />
-            )) }
-            { circles.map(circle => (
-               <Circle
-                  coordinates={ circle.coordinates }
-                  radius={ circle.radius }
-                  key={ circle.coordinates[0] + circle.radius }
-               />
-            )) }
-            { polygons.map(polygon => (
-               <Polygon
-                  coordinates={ polygon }
-                  key={ polygon.toString() }
-               />
-            )) }
-            { rectangles.map(rectangle => (
-               <Rectangle
-                  southWest={ rectangle.southWest }
-                  northEast={ rectangle.northEast }
-                  key={ rectangle.southWest[0] + rectangle.northEast[0] }
-               />
-            )) }
-            <Cluster
-               radius={ 80 }
-               markers={
-                  clusterMarkers.map((marker) => (
-                     { coordinates: marker }
-                  ))
-               }
-            />
-            { drawManagerInit && (
-               <DrawManager
-                  figureType={ drawManagerFigure }
-                  setData={ setDrawManagerData }
-               />
-            ) }
-         </ItisDGisContainer>
+               { drawManagerInit && (
+                  <DrawManager
+                     figureType={ drawManagerFigure }
+                     setData={ setDrawManagerData }
+                  />
+               ) }
+            </ItisDGisContainer>
+         ) }
       </React.Fragment>
    );
 }
