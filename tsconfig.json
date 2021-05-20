@@ -23,7 +23,8 @@
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "allowUnusedLabels": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "importHelpers": true
   },
   "include": [
     "./src"
