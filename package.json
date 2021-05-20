@@ -1,0 +1,44 @@
+{
+  "name": "itis-dgis",
+  "author": "WindX <bezalkogoln1ycoder@gmail.com>",
+  "version": "0.0.1",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "types": "./lib/esm/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn build:esm && yarn build:cjs && yarn setVersion && yarn removeTrash",
+    "build:esm": "tsc",
+    "build:cjs": "tsc --module commonjs --outDir lib/cjs",
+    "watchCjs": "tsc --module commonjs --outDir lib/cjs --watch",
+    "watchEsm": "tsc --watch",
+    "setVersion": "node bin/setVersion.js",
+    "removeTrash": "node bin/removeTrash.js",
+    "removeLib": "node bin/removeLib.js"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.7.0",
+    "@types/lodash": "^4.14.169",
+    "@types/react": "^17.0.5",
+    "@types/react-dom": "^17.0.4",
+    "@types/react-leaflet": "^2.8.1",
+    "use-named-state": "^1.0.0"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "files": [
+    "/lib",
+    "VERSION"
+  ],
+  "dependencies": {
+    "@2gis/mapgl": "^1.12.1",
+    "@2gis/mapgl-clusterer": "^2.2.0",
+    "@material-ui/styles": "^4.11.4",
+    "clsx": "^1.1.1",
+    "leaflet": "^1.7.1",
+    "lodash": "^4.17.21",
+    "react-leaflet": "^3.1.0"
+  }
+}
