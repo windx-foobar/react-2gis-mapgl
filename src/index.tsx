@@ -80,7 +80,7 @@ function ItisDGisContainer(props: ContainerProps): JSX.Element {
             let $el: HTMLDivElement = zoomControl.getContainer();
             // Центрируем контролсы зума +- по центру
             $el.style.position = 'relative';
-            $el.style.bottom = props.fullSize ? '40vh' : '-30vh';
+            $el.style.top = props.fullSize ? '40vh' : '30vh';
 
             if (props.hiddenCopy) {
                // Убираем копирайты 2гис
