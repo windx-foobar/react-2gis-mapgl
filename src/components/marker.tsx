@@ -49,7 +49,7 @@ export function Marker(props: MarkerOptions): null {
       }
 
       return () => {
-         if (map && marker) {
+         if (marker) {
             marker.destroy();
 
             if (props.throwDestroy) {
@@ -57,7 +57,7 @@ export function Marker(props: MarkerOptions): null {
             }
          }
       }
-   }, [ map, props.coordinates ]);
+   }, [ map ]);
 
    return null;
 }
