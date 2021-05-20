@@ -19,6 +19,7 @@ interface ContainerProps {
     apiKey: string;
     children?: React.ReactNodeArray;
     handlers?: MapHandlers;
+    fullSize?: boolean;
 }
 declare function ItisDGisContainer(props: ContainerProps): JSX.Element;
 export { useDGisMap, ItisDGisContainer, MapHandlers, LngLat, Marker, MarkerHandlers, HtmlMarker, HtmlMarkerHandlers, Polyline, PolylineHandlers, Circle, CircleHandlers, CirclePoints, Polygon, PolygonHandlers, Rectangle, RectangleHandlers, RectanglePoints, Cluster, DrawManager, allFigures, };
