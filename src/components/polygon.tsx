@@ -5,17 +5,21 @@ import {
    PolygonOptions as DGPolygonOptions,
    Polygon as DGPolygon
 } from '@2gis/mapgl/types';
+import { BaseFigureOptions } from '../interfaces/base_figure_options';
 
 import { isEqual, last, first } from 'lodash';
 
 import { useDGisMap } from '../contexts_hooks';
 import { defaults } from '../constants/defaults';
+import { PolylineHandlers } from './polyline';
 
 export type PolygonHandlers = {
    [P in keyof DGDynamicObjectEventTable]?: (e: DGDynamicObjectEventTable[P]) => any | void;
 }
 
-interface PolygonOptions extends DGPolygonOptions {
+type BasePolygonOptions = BaseFigureOptions<DGPolygon> & DGPolygonOptions;
+
+interface PolygonOptions extends BasePolygonOptions {
    handlers?: PolygonHandlers;
 }
 
@@ -39,11 +43,29 @@ export function Polygon(props: PolygonOptions): null {
                color: props.color ?? defaults.polygon.color,
                zIndex: props.zIndex ?? 101
             });
+
+            if (props.handlers) {
+               Object.keys(props.handlers).forEach((event: keyof PolylineHandlers) => {
+                  polygon.on(event, props.handlers![event]!);
+               });
+            }
+
+            if (props.throwCreate) {
+               props.throwCreate(polygon);
+            }
          });
       }
 
-      return () => map && polygon && polygon.destroy();
-   }, [ map, props.coordinates ]);
+      return () => {
+         if (polygon) {
+            if (props.throwDestroy) {
+               props.throwDestroy(polygon);
+            }
+
+            polygon.destroy();
+         }
+      }
+   }, [ map ]);
 
    return null;
 }

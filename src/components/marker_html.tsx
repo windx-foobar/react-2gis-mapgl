@@ -4,6 +4,7 @@ import {
    HtmlMarkerOptions as DGHtmlMarkerOptions,
    HtmlMarker as DGHtmlMarker
 } from '@2gis/mapgl/types';
+import { BaseFigureOptions } from '../interfaces/base_figure_options';
 
 import { useDGisMap } from '../contexts_hooks';
 
@@ -11,10 +12,10 @@ export type HtmlMarkerHandlers = {
    [P in keyof HTMLElementEventMap]?: (e: HTMLElementEventMap[P]) => any | void;
 }
 
-export interface HtmlMarkerOptions extends DGHtmlMarkerOptions {
+type BaseHtmlMarkerOptions = BaseFigureOptions<DGHtmlMarker> & DGHtmlMarkerOptions;
+
+export interface HtmlMarkerOptions extends BaseHtmlMarkerOptions {
    handlers?: HtmlMarkerHandlers;
-   throwDestroy?: (marker: DGHtmlMarker | null | undefined) => any;
-   throwCreate?: (marker: DGHtmlMarker | null | undefined) => any;
 }
 
 export function HtmlMarker(props: HtmlMarkerOptions): null {
@@ -49,7 +50,7 @@ export function HtmlMarker(props: HtmlMarkerOptions): null {
             marker.destroy();
          }
       }
-   }, [ map, props.coordinates[0], props.coordinates[1] ]);
+   }, [ map ]);
 
    return null;
 }

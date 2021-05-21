@@ -5,6 +5,7 @@ import {
    PolylineOptions as DGPolylineOptions,
    Polyline as DGPolyline
 } from '@2gis/mapgl/types';
+import { BaseFigureOptions } from '../interfaces/base_figure_options';
 
 import { useDGisMap } from '../contexts_hooks';
 import { defaults } from '../constants/defaults';
@@ -13,11 +14,13 @@ export type PolylineHandlers = {
    [P in keyof DGDynamicObjectEventTable]?: (e: DGDynamicObjectEventTable[P]) => any | void;
 }
 
-interface MarkerOptions extends DGPolylineOptions {
+type BasePolylineOptions = BaseFigureOptions<DGPolyline> & DGPolylineOptions;
+
+interface PolylineOptions extends BasePolylineOptions {
    handlers?: PolylineHandlers;
 }
 
-export function Polyline(props: MarkerOptions): null {
+export function Polyline(props: PolylineOptions): null {
    const map = useDGisMap();
 
    React.useEffect(() => {
@@ -31,15 +34,28 @@ export function Polyline(props: MarkerOptions): null {
                color: props.color ?? defaults.polyline.color,
                zIndex: props.zIndex ?? 101
             });
+
+            if (props.handlers) {
+               Object.keys(props.handlers).forEach((event: keyof PolylineHandlers) => {
+                  polyline.on(event, props.handlers![event]!);
+               });
+            }
+
+            if (props.throwCreate) {
+               props.throwCreate(polyline);
+            }
          });
       }
 
       return () => {
-         if (map && polyline) {
+         if (polyline) {
+            if (props.throwDestroy) {
+               props.throwDestroy(polyline);
+            }
             polyline.destroy();
          }
       }
-   }, [ map, props.coordinates ]);
+   }, [ map ]);
 
    return null;
 }

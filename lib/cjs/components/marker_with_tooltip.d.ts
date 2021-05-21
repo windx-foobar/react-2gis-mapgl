@@ -1,4 +1,5 @@
 /// <reference types="react" />
+import { Property } from 'csstype';
 import { MarkerOptions } from './marker';
 import { HtmlMarkerOptions } from './marker_html';
 export interface MarkerWithTooltipHandlers {
@@ -7,15 +8,19 @@ export interface MarkerWithTooltipHandlers {
 interface TooltipProps {
     tooltip: {
         text: string;
-        minWidth?: string;
-        maxWidth?: string;
+        minWidth?: Property.MinWidth;
+        maxWidth?: Property.MaxWidth;
         offsetTop?: string;
         offsetLeft?: string;
         showTip?: boolean;
-        padding?: string;
-        cursor?: string;
+        padding?: Property.Padding;
+        cursor?: Property.Cursor;
         throwCreate?: HtmlMarkerOptions['throwCreate'];
         throwDestroy?: HtmlMarkerOptions['throwDestroy'];
+        textTransform?: Property.TextTransform;
+        textAlign?: Property.TextAlign;
+        fontWeight?: Property.FontWeight;
+        fontSize?: Property.FontSize;
     };
 }
 interface MarkerWithTooltipOptions {

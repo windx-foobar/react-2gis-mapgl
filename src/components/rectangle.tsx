@@ -4,9 +4,11 @@ import {
    DynamicObjectEventTable as DGDynamicObjectEventTable,
    Polygon as DGPolygon
 } from '@2gis/mapgl/types';
+import { BaseFigureOptions } from '../interfaces/base_figure_options';
 
 import { useDGisMap } from '../contexts_hooks';
 import { defaults } from '../constants/defaults';
+import { MarkerHandlers } from './marker';
 
 export type RectangleHandlers = {
    [P in keyof DGDynamicObjectEventTable]: (e: DGDynamicObjectEventTable[P]) => any | void;
@@ -17,7 +19,9 @@ export interface RectanglePoints {
    northEast: number[];
 }
 
-interface RectangleOptions extends RectanglePoints {
+type BaseRectangleOptions = BaseFigureOptions<DGPolygon> & RectanglePoints;
+
+interface RectangleOptions extends BaseRectangleOptions {
    zIndex?: number;
    minZoom?: number;
    maxZoom?: number;
@@ -50,11 +54,31 @@ export function Rectangle(props: RectangleOptions): null {
                color: props.color ?? defaults.rectangle.color,
                zIndex: props.zIndex ?? 101
             });
+
+            if (props.handlers) {
+               Object.keys(props.handlers).forEach((event: keyof MarkerHandlers) => {
+                  rectangle.on(event, props.handlers![event]!);
+               });
+            }
+
+            if (props.throwCreate) {
+               props.throwCreate(rectangle);
+            }
+
+
          });
       }
 
-      return () => map && rectangle && rectangle.destroy();
-   }, [ map, props.northEast, props.southWest ]);
+      return () => {
+         if (rectangle) {
+            if (props.throwDestroy) {
+               props.throwDestroy(rectangle);
+            }
+
+            rectangle.destroy();
+         }
+      }
+   }, [ map ]);
 
    return null;
 }

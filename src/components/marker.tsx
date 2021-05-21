@@ -5,17 +5,18 @@ import {
    MarkerOptions as DGMarkerOptions,
    Marker as DGMarker
 } from '@2gis/mapgl/types';
+import { BaseFigureOptions } from '../interfaces/base_figure_options';
 
 import { useDGisMap } from '../contexts_hooks';
+
+type BaseMarkerOptions = BaseFigureOptions<DGMarker> & DGMarkerOptions;
 
 export type MarkerHandlers = {
    [P in keyof DGDynamicObjectEventTable]?: (e: DGDynamicObjectEventTable[P]) => any | void;
 }
 
-export interface MarkerOptions extends DGMarkerOptions {
+export interface MarkerOptions extends BaseMarkerOptions {
    handlers?: MarkerHandlers;
-   throwDestroy?: (marker: DGMarker | null | undefined) => any;
-   throwCreate?: (marker: DGMarker | null | undefined) => any;
 }
 
 export function Marker(props: MarkerOptions): null {
@@ -57,7 +58,7 @@ export function Marker(props: MarkerOptions): null {
             }
          }
       }
-   }, [ map, props.coordinates[0], props.coordinates[1] ]);
+   }, [ map ]);
 
    return null;
 }
