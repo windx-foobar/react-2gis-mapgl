@@ -2,7 +2,7 @@ import React from 'react';
 import { Map as DGMap } from '@2gis/mapgl/types';
 import { useDGisMap } from './contexts_hooks';
 import * as allFigures from './constants/figures';
-import 'leaflet/dist/leaflet.css';
+import { createBoundTuple } from './helpers';
 import { MapHandlers } from './handlers';
 import { Marker, MarkerHandlers } from './components/marker';
 import { Polyline, PolylineHandlers } from './components/polyline';
@@ -28,4 +28,4 @@ interface ContainerProps {
     throwCreate?: (map: DGMap | undefined) => any;
 }
 declare function ItisDGisContainer(props: ContainerProps): JSX.Element;
-export { useDGisMap, ItisDGisContainer, MapHandlers, LngLat, Marker, MarkerHandlers, HtmlMarker, HtmlMarkerHandlers, Polyline, PolylineHandlers, MarkerWithTooltip, MarkerWithTooltipHandlers, Circle, CircleHandlers, CirclePoints, Polygon, PolygonHandlers, Rectangle, RectangleHandlers, RectanglePoints, Cluster, DrawManager, allFigures, };
+export { useDGisMap, ItisDGisContainer, MapHandlers, LngLat, Marker, MarkerHandlers, HtmlMarker, HtmlMarkerHandlers, Polyline, PolylineHandlers, MarkerWithTooltip, MarkerWithTooltipHandlers, Circle, CircleHandlers, CirclePoints, Polygon, PolygonHandlers, Rectangle, RectangleHandlers, RectanglePoints, Cluster, DrawManager, allFigures, createBoundTuple };
