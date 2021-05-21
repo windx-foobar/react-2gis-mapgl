@@ -5,7 +5,7 @@ import { Map as DGMap, ZoomControl as DGZoomControl } from '@2gis/mapgl/types';
 import { useDGisMap, ItisDGisProvider } from './contexts_hooks';
 import defaults from './constants/defaults';
 import * as allFigures from './constants/figures';
-import 'leaflet/dist/leaflet.css';
+import { createBoundTuple } from './helpers';
 
 // Library Components
 import { EventHandlers, MapHandlers } from './handlers';
@@ -155,4 +155,5 @@ export {
    Cluster,
    DrawManager,
    allFigures,
+   createBoundTuple
 };
