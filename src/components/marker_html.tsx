@@ -50,7 +50,7 @@ export function HtmlMarker(props: HtmlMarkerOptions): null {
             marker.destroy();
          }
       }
-   }, [ map ]);
+   }, [ map, props.coordinates[0], props.coordinates[1] ]);
 
    return null;
 }

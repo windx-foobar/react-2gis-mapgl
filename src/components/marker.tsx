@@ -58,7 +58,7 @@ export function Marker(props: MarkerOptions): null {
             }
          }
       }
-   }, [ map ]);
+   }, [ map, props.coordinates[0], props.coordinates[1] ]);
 
    return null;
 }
