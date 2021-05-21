@@ -11,8 +11,10 @@ export type HtmlMarkerHandlers = {
    [P in keyof HTMLElementEventMap]?: (e: HTMLElementEventMap[P]) => any | void;
 }
 
-interface HtmlMarkerOptions extends DGHtmlMarkerOptions {
+export interface HtmlMarkerOptions extends DGHtmlMarkerOptions {
    handlers?: HtmlMarkerHandlers;
+   throwDestroy?: (marker: DGHtmlMarker | null | undefined) => any;
+   throwCreate?: (marker: DGHtmlMarker | null | undefined) => any;
 }
 
 export function HtmlMarker(props: HtmlMarkerOptions): null {
@@ -36,11 +38,18 @@ export function HtmlMarker(props: HtmlMarkerOptions): null {
                   html.addEventListener(event, props.handlers![event]!);
                });
             }
+
+            if (props.throwCreate) props.throwCreate(marker);
          });
       }
 
-      return () => map && marker && marker.destroy();
-   }, [ map, props.coordinates ]);
+      return () => {
+         if (marker) {
+            if (props.throwDestroy) props.throwDestroy(marker);
+            marker.destroy();
+         }
+      }
+   }, [ map, props.coordinates[0], props.coordinates[1] ]);
 
    return null;
 }

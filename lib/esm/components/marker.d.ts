@@ -2,7 +2,7 @@ import { DynamicObjectEventTable as DGDynamicObjectEventTable, MarkerOptions as 
 export declare type MarkerHandlers = {
     [P in keyof DGDynamicObjectEventTable]?: (e: DGDynamicObjectEventTable[P]) => any | void;
 };
-interface MarkerOptions extends DGMarkerOptions {
+export interface MarkerOptions extends DGMarkerOptions {
     handlers?: MarkerHandlers;
     throwDestroy?: (marker: DGMarker | null | undefined) => any;
     throwCreate?: (marker: DGMarker | null | undefined) => any;

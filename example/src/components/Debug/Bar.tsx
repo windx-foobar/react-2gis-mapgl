@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { LatLngExpression } from 'leaflet';
 import { LngLat, RectanglePoints, CirclePoints, allFigures } from 'itis-dgis';
-import { CarMarkerPoint } from '../../App';
+import { CarMarkerPointWithName } from '../../App';
 
 import clsx from 'clsx';
 import useStyles from './Bar.style';
@@ -18,7 +18,7 @@ interface Bar {
    setDrawManager: Dispatch<SetStateAction<boolean>>;
    setDrawManagerFigure: Dispatch<SetStateAction<number>>;
    setDrawManagerData: Dispatch<SetStateAction<any>>;
-   setCarMarkers: Dispatch<SetStateAction<CarMarkerPoint[]>>;
+   setCarMarkers: Dispatch<SetStateAction<CarMarkerPointWithName[]>>;
 }
 
 export const Bar = (props: Bar) => {

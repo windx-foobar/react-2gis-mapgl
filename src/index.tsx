@@ -15,6 +15,7 @@ import { Circle, CircleHandlers, CirclePoints } from './components/circle';
 import { Polygon, PolygonHandlers } from './components/polygon';
 import { Rectangle, RectangleHandlers, RectanglePoints } from './components/rectangle';
 import { HtmlMarker, HtmlMarkerHandlers } from './components/marker_html';
+import { MarkerWithTooltip, MarkerWithTooltipHandlers } from './components/marker_with_tooltip';
 import DrawManager from './components/draw_manager';
 import Cluster from './components/markers_cluster';
 import VirtualEvents from './components/virtual_events';
@@ -141,6 +142,8 @@ export {
    HtmlMarkerHandlers,
    Polyline,
    PolylineHandlers,
+   MarkerWithTooltip,
+   MarkerWithTooltipHandlers,
    Circle,
    CircleHandlers,
    CirclePoints,

@@ -10,6 +10,7 @@ import { Circle, CircleHandlers, CirclePoints } from './components/circle';
 import { Polygon, PolygonHandlers } from './components/polygon';
 import { Rectangle, RectangleHandlers, RectanglePoints } from './components/rectangle';
 import { HtmlMarker, HtmlMarkerHandlers } from './components/marker_html';
+import { MarkerWithTooltip, MarkerWithTooltipHandlers } from './components/marker_with_tooltip';
 import DrawManager from './components/draw_manager';
 import Cluster from './components/markers_cluster';
 declare type LngLat = [number, number];
@@ -27,4 +28,4 @@ interface ContainerProps {
     throwCreate?: (map: DGMap | undefined) => any;
 }
 declare function ItisDGisContainer(props: ContainerProps): JSX.Element;
-export { useDGisMap, ItisDGisContainer, MapHandlers, LngLat, Marker, MarkerHandlers, HtmlMarker, HtmlMarkerHandlers, Polyline, PolylineHandlers, Circle, CircleHandlers, CirclePoints, Polygon, PolygonHandlers, Rectangle, RectangleHandlers, RectanglePoints, Cluster, DrawManager, allFigures, };
+export { useDGisMap, ItisDGisContainer, MapHandlers, LngLat, Marker, MarkerHandlers, HtmlMarker, HtmlMarkerHandlers, Polyline, PolylineHandlers, MarkerWithTooltip, MarkerWithTooltipHandlers, Circle, CircleHandlers, CirclePoints, Polygon, PolygonHandlers, Rectangle, RectangleHandlers, RectanglePoints, Cluster, DrawManager, allFigures, };

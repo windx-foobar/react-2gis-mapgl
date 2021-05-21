@@ -1,9 +1,9 @@
 import React from 'react';
 import { Marker } from 'itis-dgis';
-import { CarMarkerPoint } from '../App';
+import { CarMarkerPointWithName } from '../App';
 
 interface CarMarkersProps {
-   cars: CarMarkerPoint[];
+   cars: CarMarkerPointWithName[];
 }
 
 export function CarMarkers(props: CarMarkersProps): JSX.Element | null {

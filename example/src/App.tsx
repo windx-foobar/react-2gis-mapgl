@@ -14,6 +14,7 @@ import {
 } from 'itis-dgis';
 import { Bar } from './components/Debug/Bar';
 import CarMarkers from './components/CarMarkers';
+import Track from './components/Track';
 
 // Mocks
 import {
@@ -24,13 +25,19 @@ import {
    polygons as _polygons,
    rectangles as _rectangles,
    clusterMarkers as _clusterMarkers,
-   carMarkers as _carMarkers
+   carMarkers as _carMarkers,
+   trackWayPoints
 } from './constants/mock';
+
+import { head, last } from 'lodash';
 
 export interface CarMarkerPoint {
    lat: number;
    lng?: number;
    lon?: number;
+}
+
+export interface CarMarkerPointWithName extends CarMarkerPoint {
    name: string;
 }
 
@@ -57,6 +64,9 @@ function App(): JSX.Element {
          },
          moveend(this: DGMap) {
             setCenter(this.getCenter());
+         },
+         click(e) {
+            console.log({ lat: e.lngLat[1], lon: e.lngLat[0] });
          }
       }),
       []
@@ -91,6 +101,11 @@ function App(): JSX.Element {
                throwCreate={ (map) => console.log(map) }
             >
                <CarMarkers cars={ carMarkers } />
+               <Track
+                  wayPoints={ trackWayPoints }
+                  firstPoint={ head(trackWayPoints) }
+                  lastPoint={ last(trackWayPoints) }
+               />
                { markers.map((marker) => (
                   <Marker
                      coordinates={ marker }

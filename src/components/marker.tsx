@@ -12,7 +12,7 @@ export type MarkerHandlers = {
    [P in keyof DGDynamicObjectEventTable]?: (e: DGDynamicObjectEventTable[P]) => any | void;
 }
 
-interface MarkerOptions extends DGMarkerOptions {
+export interface MarkerOptions extends DGMarkerOptions {
    handlers?: MarkerHandlers;
    throwDestroy?: (marker: DGMarker | null | undefined) => any;
    throwCreate?: (marker: DGMarker | null | undefined) => any;
@@ -57,7 +57,7 @@ export function Marker(props: MarkerOptions): null {
             }
          }
       }
-   }, [ map ]);
+   }, [ map, props.coordinates[0], props.coordinates[1] ]);
 
    return null;
 }
