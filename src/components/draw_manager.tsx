@@ -12,6 +12,9 @@ import { destructBoundTuple } from '../helpers';
 interface DrawManagerProps {
    figureType: number;
    setData: React.Dispatch<React.SetStateAction<any>>;
+   destructPolyline?: boolean;
+   destructCircle?: boolean;
+   destructPolygon?: boolean;
 }
 
 const initialCircle: CirclePoints = {
@@ -136,10 +139,14 @@ export function DrawManager(props: DrawManagerProps) {
       },
       click() {
          setShowMarkers(false);
-         props.setData({
-            ...destructBoundTuple(circleModel.coordinates),
-            radius: circleModel.radius
-         });
+         if (props.destructCircle) {
+            props.setData({
+               ...destructBoundTuple(circleModel.coordinates),
+               radius: circleModel.radius
+            });
+         } else {
+            props.setData(circleModel);
+         }
       },
       wheel() {
          setCircleModel(model => {
@@ -179,13 +186,15 @@ export function DrawManager(props: DrawManagerProps) {
 
             if (polygonCreate) {
                props.setData({
-                  points: [ ...polygonModel, polygonModel[0] ].map(bound => destructBoundTuple(bound))
+                  points: [ ...polygonModel, polygonModel[0] ]
+                     .map(bound => props.destructPolygon ? destructBoundTuple(bound) : bound)
                });
                return true;
             }
 
             props.setData({
-               points: polylineModel.map(bound => destructBoundTuple(bound))
+               points: polylineModel
+                  .map(bound => props.destructPolyline ? destructBoundTuple(bound) : bound)
             });
             return true;
          }
