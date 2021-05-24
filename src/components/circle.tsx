@@ -58,7 +58,7 @@ export function Circle(props: CircleOptions): null {
             if (props.onDestroy) props.onDestroy(circle);
          }
       }
-   }, [ map, props.coordinates, props.handlers, props.radius ]);
+   }, [ map, props.coordinates[0], props.coordinates[1], props.handlers, props.radius ]);
 
    return null;
 }
