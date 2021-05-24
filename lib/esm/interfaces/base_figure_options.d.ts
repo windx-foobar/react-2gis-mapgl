@@ -1,4 +1,4 @@
 export interface BaseFigureOptions<T> {
-    throwDestroy?: (figure: T | null | undefined) => any;
-    throwCreate?: (figure: T | null | undefined) => any;
+    onDestroy?: (figure: T | null | undefined) => any;
+    onCreate?: (figure: T | null | undefined) => any;
 }
