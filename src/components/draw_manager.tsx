@@ -32,7 +32,7 @@ function HtmlCircleMarkerHtml(): JSX.Element {
             cursor: 'pointer',
             border: '3px solid #0081F2',
             borderRadius: '100%',
-            transform: 'translate(-24px, -20px)'
+            transform: 'translate(-14px, -20px)'
          } }
       />
    );
@@ -43,8 +43,8 @@ function HtmlMarkerHtml(): JSX.Element {
       <div
          style={ {
             backgroundColor: 'white',
-            width: '15px',
-            height: '15px',
+            width: '20px',
+            height: '20px',
             cursor: 'pointer',
             border: '3px solid #0081F2',
             borderRadius: '100%',
