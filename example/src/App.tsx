@@ -97,15 +97,15 @@ function App(): JSX.Element {
                zoom={ zoom }
                hiddenCopy
                centerControls
-               throwDestroy={ (map) => console.log(map) }
-               throwCreate={ (map) => console.log(map) }
+               onDestroy={ (map) => console.log(map) }
+               onCreate={ (map) => console.log(map) }
             >
-               <CarMarkers cars={ carMarkers } />
+               {/*<CarMarkers cars={ carMarkers } />
                <Track
                   wayPoints={ trackWayPoints }
                   firstPoint={ head(trackWayPoints) }
                   lastPoint={ last(trackWayPoints) }
-               />
+               />*/ }
                { markers.map((marker) => (
                   <Marker
                      coordinates={ marker }

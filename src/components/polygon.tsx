@@ -61,7 +61,7 @@ export function Polygon(props: PolygonOptions): null {
             polygon.destroy();
          }
       }
-   }, [ map ]);
+   }, [ map, props.coordinates[0].length ]);
 
    return null;
 }

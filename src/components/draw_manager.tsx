@@ -7,6 +7,7 @@ import Polygon from './polygon';
 import * as allFigures from '../constants/figures';
 import { useDGisMap } from '../contexts_hooks';
 import { MapHandlers } from '../handlers';
+import { destructBoundTuple } from '../helpers';
 
 interface DrawManagerProps {
    figureType: number;
@@ -23,12 +24,12 @@ function HtmlCircleMarkerHtml(): JSX.Element {
       <div
          style={ {
             backgroundColor: 'white',
-            width: '20px',
-            height: '20px',
+            width: '30px',
+            height: '30px',
             cursor: 'pointer',
             border: '3px solid #0081F2',
             borderRadius: '100%',
-            transform: 'translate(-14px, -10px)'
+            transform: 'translate(-24px, -20px)'
          } }
       />
    );
@@ -39,12 +40,12 @@ function HtmlMarkerHtml(): JSX.Element {
       <div
          style={ {
             backgroundColor: 'white',
-            width: '10px',
-            height: '10px',
+            width: '15px',
+            height: '15px',
             cursor: 'pointer',
             border: '3px solid #0081F2',
             borderRadius: '100%',
-            transform: 'translate(-7px, -5px)'
+            transform: 'translate(-12px, -10px)'
          } }
       />
    );
@@ -135,7 +136,10 @@ export function DrawManager(props: DrawManagerProps) {
       },
       click() {
          setShowMarkers(false);
-         props.setData(circleModel);
+         props.setData({
+            ...destructBoundTuple(circleModel.coordinates),
+            radius: circleModel.radius
+         });
       },
       wheel() {
          setCircleModel(model => {
@@ -174,11 +178,15 @@ export function DrawManager(props: DrawManagerProps) {
             setShowMarkers(false);
 
             if (polygonCreate) {
-               props.setData([ ...polygonModel, polygonModel[0] ]);
+               props.setData({
+                  points: [ ...polygonModel, polygonModel[0] ].map(bound => destructBoundTuple(bound))
+               });
                return true;
             }
 
-            props.setData(polylineModel);
+            props.setData({
+               points: polylineModel.map(bound => destructBoundTuple(bound))
+            });
             return true;
          }
 

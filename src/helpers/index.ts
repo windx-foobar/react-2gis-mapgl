@@ -10,3 +10,11 @@ export function createBoundTuple(bound: Bound): [ number, number ] {
       bound.lat
    ];
 }
+
+export function destructBoundTuple(tupleBound: [ number, number ] | number[], lngMode: boolean = false): Bound {
+   if (lngMode) {
+      return { lat: tupleBound[1], lng: tupleBound[0] }
+   }
+
+   return { lat: tupleBound[1], lon: tupleBound[0] }
+}

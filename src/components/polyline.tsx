@@ -51,7 +51,7 @@ export function Polyline(props: PolylineOptions): null {
             polyline.destroy();
          }
       }
-   }, [ map ]);
+   }, [ map, props.coordinates.length ]);
 
    return null;
 }
