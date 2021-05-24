@@ -1,7 +1,12 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { LatLngExpression } from 'leaflet';
-import { LngLat, RectanglePoints, CirclePoints, allFigures } from 'itis-dgis';
+import { LngLat, RectanglePoints, CirclePoints, allFigures, destructBoundTuple } from 'itis-dgis';
 import { CarMarkerPointWithName } from '../../App';
+import {
+   polylines as _polylines,
+   circles as _circles,
+   polygons as _polygons,
+} from '../../constants/mock';
 
 import clsx from 'clsx';
 import useStyles from './Bar.style';
@@ -19,6 +24,9 @@ interface Bar {
    setDrawManagerFigure: Dispatch<SetStateAction<number>>;
    setDrawManagerData: Dispatch<SetStateAction<any>>;
    setCarMarkers: Dispatch<SetStateAction<CarMarkerPointWithName[]>>;
+   setEditManager: Dispatch<SetStateAction<boolean>>;
+   setEditManagerFigure: Dispatch<SetStateAction<number>>;
+   setEditManagerData: Dispatch<SetStateAction<any>>;
 }
 
 export const Bar = (props: Bar) => {
@@ -145,129 +153,14 @@ export const Bar = (props: Bar) => {
 
          props.setDrawManager(active);
          props.setDrawManagerFigure(figure);
-      }
-      /*polylineHandler(db = null) {
-         props.setMarkers([]);
-         if (db) {
-            const half = db.length / 2;
+      },
+      editorHandler(active: boolean, figure: number = 1, data: any = null) {
+         this.resetAlLFigures();
 
-            props.setIdxWayPoints(0);
-            props.setWayPoints(db);
-            props.setMapCenter([ db[half].lon, db[half].lat ]);
-         } else {
-            props.setIdxWayPoints(null);
-            props.setWayPoints([]);
-            props.setIdxInfo(null);
-         }
+         props.setEditManagerData(data);
+         props.setEditManager(active);
+         props.setEditManagerFigure(figure);
       },
-      logDb() {
-         console.log(db);
-      },
-      geozonesHandler() {
-         props.setMarkers([]);
-         props.setWayPoints([]);
-         props.setIdxWayPoints(null);
-         props.setIdxInfo(null);
-
-         graphQLClient.request(queryGeozones).then((data) => {
-            const { geozones } = data;
-            props.setGeozoneObjects(geozones);
-            props.setMapPage(_ => ({ pageGeozone: false, pageGeozoneObjects: true }));
-         });
-      },
-      geozoneHandler(name) {
-         props.setMarkers([]);
-         props.setWayPoints([]);
-         props.setIdxWayPoints(null);
-         props.setIdxInfo(null);
-
-         graphQLClient.request(queryGeozoneByName, {
-            name: name ?? 'Наб. Челны'
-         }).then((data) => {
-            const { geozoneByName: geozone } = data;
-
-            mapI.setCenter([ geozone.data.lon, geozone.data.lat ]);
-
-            props.setGeozoneObject(geozone);
-            props.setMapPage(_ => ({ pageGeozone: true, pageGeozoneObjects: false }));
-         })
-      },
-      resetGeozonesHandler() {
-         props.setGeozoneObject({});
-         props.setGeozoneObjects([]);
-         props.setMarkers([]);
-         props.setMapPage(_ => ({ pageGeozone: false, pageGeozoneObjects: true }));
-      },
-      graphQLTest() {
-         graphQLClient.request(queryGeozones).then(data => {
-            console.log(data);
-         }).catch(err => {
-            console.log(err);
-         });
-      },
-      createCircleGeozone() {
-         props.setMarkers([]);
-         props.setWayPoints([]);
-         props.setIdxWayPoints(null);
-         props.setIdxInfo(null);
-         props.setGeozoneObject({});
-         props.setGeozoneObjects([]);
-         props.setMapPage(prev => ({
-            ...prev,
-            pageGeozone: false,
-            pageGeozoneObjects: false,
-            pageGeozoneCreate: true
-         }));
-         props.setDrawingFigure(prev => ({
-            ...prev,
-            figure: Circle,
-         }));
-      },
-      createPolylineGeozone() {
-         props.setMarkers([]);
-         props.setWayPoints([]);
-         props.setIdxWayPoints(null);
-         props.setIdxInfo(null);
-         props.setGeozoneObject({});
-         props.setGeozoneObjects([]);
-         props.setMapPage(prev => ({
-            ...prev,
-            pageGeozone: false,
-            pageGeozoneObjects: false,
-            pageGeozoneCreate: true
-         }));
-         props.setDrawingFigure(prev => ({
-            ...prev,
-            figure: Polyline,
-         }));
-      },
-      createPolygonGeozone() {
-         props.setMarkers([]);
-         props.setWayPoints([]);
-         props.setIdxWayPoints(null);
-         props.setIdxInfo(null);
-         props.setGeozoneObject({});
-         props.setGeozoneObjects([]);
-         props.setMapPage(prev => ({
-            ...prev,
-            pageGeozone: false,
-            pageGeozoneObjects: false,
-            pageGeozoneCreate: true
-         }));
-         props.setDrawingFigure(prev => ({
-            ...prev,
-            figure: Polygon,
-         }));
-      },
-      destroyBuilding() {
-         props.setMapPage(prev => ({
-            ...prev,
-            pageGeozoneCreate: false
-         }));
-         props.setDrawingFigure(_ => ({
-            figure: null,
-         }));
-      }*/
    }
 
    return (
@@ -494,6 +387,35 @@ export const Bar = (props: Bar) => {
          </div>
          <div className={ classes.buttonWrapper }>
             <button
+               onClick={ () => handlers.editorHandler(true, allFigures.Circle, {
+                  radius: _circles[0].radius,
+                  lat: _circles[0].coordinates[1],
+                  lon: _circles[0].coordinates[0]
+               }) }
+            >
+               Изменить круг
+            </button>
+         </div>
+         <div className={ classes.buttonWrapper }>
+            <button
+               onClick={ () => handlers.editorHandler(true, allFigures.Polyline, {
+                  points: _polylines[0].map(bound => destructBoundTuple(bound))
+               }) }
+            >
+               Изменить полилайн
+            </button>
+         </div>
+         <div className={ classes.buttonWrapper }>
+            <button
+               onClick={ () => handlers.editorHandler(true, allFigures.Polygon, {
+                  points: _polygons[0][0].map(bound => destructBoundTuple(bound))
+               }) }
+            >
+               Изменить полигон
+            </button>
+         </div>
+         <div className={ classes.buttonWrapper }>
+            <button
                onClick={ () => handlers.resetAlLFigures() }
             >
                Удалить все элементы
@@ -501,7 +423,10 @@ export const Bar = (props: Bar) => {
          </div>
          <div className={ classes.buttonWrapper }>
             <button
-               onClick={ () => handlers.managerHandler(false) }
+               onClick={ () => {
+                  handlers.managerHandler(false)
+                  handlers.editorHandler(false)
+               } }
             >
                Отменить создание фигуры
             </button>

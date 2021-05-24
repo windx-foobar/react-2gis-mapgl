@@ -1,5 +1,6 @@
 import { defaults } from 'itis-dgis/src/constants/defaults';
-import { CarMarkerPointWithName, CarMarkerPoint } from '../App';
+import { CarMarkerPointWithName } from '../App';
+import { Bound } from 'itis-dgis';
 
 export const carMarkers: CarMarkerPointWithName[] = [
    { lat: 51.0078163146973, lng: 58.4405479431152, name: 'в454сн 716' },
@@ -95,7 +96,7 @@ export const map = {
    zoom: defaults.map.zoom
 };
 
-export const trackWayPoints: CarMarkerPoint[] = [
+export const trackWayPoints: Bound[] = [
    { lat: 56.844233307755154, lon: 35.79250714042244 },
    { lat: 56.844528433982184, lon: 35.794305873707636 },
    { lat: 56.84462680887433, lon: 35.79898258070365 },

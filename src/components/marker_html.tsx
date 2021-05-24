@@ -58,7 +58,7 @@ export function HtmlMarker(props: HtmlMarkerOptions): null {
             marker.destroy();
          }
       }
-   }, [ map, props.coordinates[0], props.coordinates[1] ]);
+   }, [ map, props.coordinates[0], props.coordinates[1], props.html, props.handlers ]);
 
    return null;
 }

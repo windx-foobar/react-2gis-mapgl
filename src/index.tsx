@@ -5,7 +5,7 @@ import { Map as DGMap, ZoomControl as DGZoomControl } from '@2gis/mapgl/types';
 import { useDGisMap, ItisDGisProvider } from './contexts_hooks';
 import defaults from './constants/defaults';
 import * as allFigures from './constants/figures';
-import { createBoundTuple } from './helpers';
+import { createBoundTuple, destructBoundTuple, Bound } from './helpers';
 import { BaseFigureOptions } from './interfaces/base_figure_options';
 
 // Library Components
@@ -18,6 +18,7 @@ import { Rectangle, RectangleHandlers, RectanglePoints } from './components/rect
 import { HtmlMarker, HtmlMarkerHandlers } from './components/marker_html';
 import { MarkerWithTooltip, MarkerWithTooltipHandlers } from './components/marker_with_tooltip';
 import DrawManager from './components/draw_manager';
+import EditManager from './components/edit_manager';
 import Cluster from './components/markers_cluster';
 import VirtualEvents from './components/virtual_events';
 
@@ -153,6 +154,9 @@ export {
    RectanglePoints,
    Cluster,
    DrawManager,
+   EditManager,
    allFigures,
-   createBoundTuple
+   createBoundTuple,
+   destructBoundTuple,
+   Bound
 };

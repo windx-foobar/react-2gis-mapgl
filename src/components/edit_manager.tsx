@@ -7,9 +7,23 @@ import Polygon from './polygon';
 import * as allFigures from '../constants/figures';
 import { useDGisMap } from '../contexts_hooks';
 import { MapHandlers } from '../handlers';
-import { destructBoundTuple } from '../helpers';
+import {
+   HtmlMarkerHtml,
+   HtmlCircleMarkerHtml,
+   initialCircle,
+} from './draw_manager';
+import { createBoundTuple, destructBoundTuple, Bound } from '../helpers';
 
-export interface DrawManagerProps {
+interface EditManagerProps {
+   figureData: {
+      points?: Bound[],
+      radius?: number,
+      lat?: number,
+      lon?: number,
+      lng?: number,
+      southWest: Bound,
+      northEast: Bound
+   };
    figureType: number;
    setData: React.Dispatch<React.SetStateAction<any>>;
    destructPolyline?: boolean;
@@ -17,72 +31,11 @@ export interface DrawManagerProps {
    destructPolygon?: boolean;
 }
 
-export const initialCircle: CirclePoints = {
-   coordinates: [],
-   radius: 45000
-};
-
-export function HtmlCircleMarkerHtml(): JSX.Element {
-   return (
-      <div
-         style={ {
-            backgroundColor: 'white',
-            width: '30px',
-            height: '30px',
-            cursor: 'pointer',
-            border: '3px solid #0081F2',
-            borderRadius: '100%',
-            transform: 'translate(-14px, -20px)'
-         } }
-      />
-   );
+interface HtmlCustomHandlers extends Omit<HtmlMarkerHandlers, 'click'> {
+   click?: (e: MouseEvent, currentIdx: number) => any;
 }
 
-export function HtmlMarkerHtml(props: { last?: boolean }): JSX.Element {
-   if (props.last) {
-      return (
-         <div
-            style={ {
-               backgroundColor: 'white',
-               width: '20px',
-               height: '20px',
-               cursor: 'pointer',
-               border: '3px solid #0081F2',
-               borderRadius: '100%',
-               transform: 'translate(-12px, -10px)'
-            } }
-         >
-            <div
-               style={ {
-                  backgroundColor: 'white',
-                  width: '12px',
-                  height: '12px',
-                  cursor: 'pointer',
-                  border: '2px solid #0081F2',
-                  borderRadius: '100%',
-                  transform: 'translate(2px, 2px)'
-               } }
-            />
-         </div>
-      );
-   }
-
-   return (
-      <div
-         style={ {
-            backgroundColor: 'white',
-            width: '20px',
-            height: '20px',
-            cursor: 'pointer',
-            border: '3px solid #0081F2',
-            borderRadius: '100%',
-            transform: 'translate(-12px, -10px)'
-         } }
-      />
-   );
-}
-
-export function DrawManager(props: DrawManagerProps) {
+export function EditManager(props: EditManagerProps) {
    const map = useDGisMap();
 
    const [ circleCreate, setCircleCreate ] = React.useState(false);
@@ -99,7 +52,7 @@ export function DrawManager(props: DrawManagerProps) {
       [ 0, 0 ]
    ]);
 
-   const [ initFirstMarker, setInitFirstMarker ] = React.useState(true);
+   const [ initFirstMarker, setInitFirstMarker ] = React.useState(false);
    const [ showMarkers, setShowMarkers ] = React.useState(true);
 
    const mapHandlers = React.useMemo(
@@ -114,22 +67,12 @@ export function DrawManager(props: DrawManagerProps) {
             }
 
             if (polylineCreate) {
-               if (initFirstMarker) {
-                  setPolylineModel([ e.lngLat ]);
-                  setInitFirstMarker(false);
-               } else {
-                  setPolylineModel((model) => [ ...model, e.lngLat ]);
-               }
+               setPolylineModel((model) => [ ...model, e.lngLat ]);
                return true;
             }
 
             if (polygonCreate) {
-               if (initFirstMarker) {
-                  setPolygonModel([ e.lngLat ]);
-                  setInitFirstMarker(false);
-               } else {
-                  setPolygonModel((model) => [ ...model, e.lngLat ]);
-               }
+               setPolygonModel((model) => [ ...model, e.lngLat ]);
                return true;
             }
 
@@ -161,54 +104,60 @@ export function DrawManager(props: DrawManagerProps) {
       ]
    );
 
-   const circleCenterMarkerHandlers = React.useMemo((): HtmlMarkerHandlers => ({
-      mousedown() {
-         setCircleMoving(true);
-      },
-      mouseup() {
-         setCircleMoving(false);
-      },
-      click() {
-         setShowMarkers(false);
-         if (props.destructCircle) {
-            props.setData({
-               ...destructBoundTuple(circleModel.coordinates),
-               radius: circleModel.radius
-            });
-         } else {
-            props.setData(circleModel);
-         }
-      },
-      wheel() {
-         setCircleModel(model => {
-            let newRadius = model.radius / 100;
-
-            return {
-               ...model,
-               radius: model.radius + (newRadius > 500 ? newRadius : 500)
-            }
-         });
-      }
-   }), [ circleModel ]);
-
-   const circleHandlers = React.useMemo((): CircleHandlers => ({
-      mousemove(e) {
-         if (circleMoving) {
-            setCircleModel(model => ({
-               ...model,
-               coordinates: e.lngLat
-            }))
-         }
-      },
-      mouseup() {
-         if (circleMoving) {
+   const circleCenterMarkerHandlers = React.useMemo(
+      (): HtmlMarkerHandlers => ({
+         mousedown() {
+            setCircleMoving(true);
+         },
+         mouseup() {
             setCircleMoving(false);
-            return true;
-         }
+         },
+         click() {
+            setShowMarkers(false);
+            if (props.destructCircle) {
+               props.setData({
+                  ...destructBoundTuple(circleModel.coordinates),
+                  radius: circleModel.radius
+               });
+            } else {
+               props.setData(circleModel);
+            }
+         },
+         wheel() {
+            setCircleModel(model => {
+               let newRadius = model.radius / 100;
 
-         return false;
-      }
-   }), [ circleMoving ]);
+               return {
+                  ...model,
+                  radius: model.radius + (newRadius > 500 ? newRadius : 500)
+               }
+            });
+         }
+      }),
+      [ circleModel ]
+   );
+
+   const circleHandlers = React.useMemo(
+      (): CircleHandlers => ({
+         mousemove(e) {
+            if (circleMoving) {
+               setCircleModel(model => ({
+                  ...model,
+                  coordinates: e.lngLat
+               }))
+            }
+         },
+         mouseup() {
+            if (circleMoving) {
+               setCircleMoving(false);
+               return true;
+            }
+
+            return false;
+         }
+      }),
+      [ circleMoving ]
+   );
 
    const lineLastMarkerHandlers = React.useMemo(
       (): HtmlMarkerHandlers => ({
@@ -234,28 +183,71 @@ export function DrawManager(props: DrawManagerProps) {
             return false;
          }
       }),
-      [ initFirstMarker, polylineCreate, polygonCreate, polylineModel, polygonModel ]
+      [
+         initFirstMarker,
+         polylineCreate,
+         polygonCreate,
+         polylineModel,
+         polygonModel
+      ]
    );
 
-   React.useEffect(() => {
-      switch (props.figureType) {
-         case allFigures.Circle:
-            setCircleCreate(true);
-            break;
-         case allFigures.Polygon:
-            setPolygonCreate(true);
-            break;
-         case allFigures.Polyline:
-            setPolylineCreate(true);
-            break;
-      }
+   const lineAllMarkerHandlers = React.useMemo(
+      (): HtmlCustomHandlers => ({
+         click(e, currentIdx) {
+            if (polygonCreate) {
+               setPolygonModel(prev => prev.filter((_, idx) => idx !== currentIdx));
+               return true;
+            }
 
-      return () => {
-         setCircleCreate(false);
-         setPolygonCreate(false);
-         setPolylineCreate(false);
-      }
-   }, [ props.figureType ]);
+            if (polylineCreate) {
+               setPolylineModel(prev => prev.filter((_, idx) => idx !== currentIdx));
+               return true;
+            }
+
+            return false;
+         }
+      }),
+      [
+         initFirstMarker,
+         polylineCreate,
+         polygonCreate,
+         polylineModel.length,
+         polygonModel.length
+      ]
+   );
+
+   React.useEffect(
+      () => {
+         switch (props.figureType) {
+            case allFigures.Circle:
+               setCircleCreate(true);
+               setCircleModel({
+                  coordinates: [ props.figureData!.lon ?? props.figureData!.lng ?? 0, props.figureData!.lat! ],
+                  radius: props.figureData!.radius!
+               });
+               break;
+            case allFigures.Polygon:
+               setPolygonCreate(true);
+               setPolygonModel(() => props.figureData!.points!.map(bound => createBoundTuple(bound)));
+               break;
+            case allFigures.Polyline:
+               setPolylineCreate(true);
+               setPolylineModel(() => props.figureData!.points!.map(bound => createBoundTuple(bound)));
+               break;
+         }
+
+         return () => {
+            setCircleCreate(false);
+            setPolygonCreate(false);
+            setPolylineCreate(false);
+         }
+      },
+      [
+         props.figureType,
+         props.figureData
+      ]
+   );
 
    React.useEffect(
       () => {
@@ -308,12 +300,15 @@ export function DrawManager(props: DrawManagerProps) {
          ) }
          { polylineCreate && !!polylineModel[0].filter(lngLat => lngLat > 0).length && (
             <React.Fragment>
-               { showMarkers && polylineModel.map((model, idx, models) => (
+               { showMarkers && polylineModel.map((bound, idx, models) => (
                   <HtmlMarker
-                     coordinates={ model }
-                     html={ ReactDOMServer.renderToString(<HtmlMarkerHtml />) }
-                     handlers={ idx === models.length - 1 ? lineLastMarkerHandlers : undefined }
-                     key={ model[0] + model[1] }
+                     coordinates={ bound }
+                     html={ ReactDOMServer.renderToString(<HtmlMarkerHtml last={ idx === models.length - 1 } />) }
+                     handlers={ idx === models.length - 1 ? lineLastMarkerHandlers : {
+                        ...lineAllMarkerHandlers,
+                        click: (e) => lineAllMarkerHandlers.click!(e, idx)
+                     } }
+                     key={ bound[0] + bound[1] }
                   />
                )) }
                <Polyline coordinates={ polylineModel } />
@@ -321,12 +316,15 @@ export function DrawManager(props: DrawManagerProps) {
          ) }
          { polygonCreate && !!polygonModel[0].filter(lngLat => lngLat > 0).length && (
             <React.Fragment>
-               { showMarkers && polygonModel.map((model, idx, models) => (
+               { showMarkers && polygonModel.map((bound, idx, models) => (
                   <HtmlMarker
-                     coordinates={ model }
-                     html={ ReactDOMServer.renderToString(<HtmlMarkerHtml />) }
-                     handlers={ idx === models.length - 1 ? lineLastMarkerHandlers : undefined }
-                     key={ model[0] + model[1] }
+                     coordinates={ bound }
+                     html={ ReactDOMServer.renderToString(<HtmlMarkerHtml last={ idx === models.length - 1 } />) }
+                     handlers={ idx === models.length - 1 ? lineLastMarkerHandlers : {
+                        ...lineAllMarkerHandlers,
+                        click: (e) => lineAllMarkerHandlers.click!(e, idx)
+                     } }
+                     key={ bound[0] + bound[1] }
                   />
                )) }
                <Polygon coordinates={ [ polygonModel ] } />
@@ -336,4 +334,4 @@ export function DrawManager(props: DrawManagerProps) {
    )
 }
 
-export default DrawManager;
+export default EditManager;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Map as DGMap } from '@2gis/mapgl/types';
 import { useDGisMap } from './contexts_hooks';
 import * as allFigures from './constants/figures';
-import { createBoundTuple } from './helpers';
+import { createBoundTuple, destructBoundTuple, Bound } from './helpers';
 import { BaseFigureOptions } from './interfaces/base_figure_options';
 import { MapHandlers } from './handlers';
 import { Marker, MarkerHandlers } from './components/marker';
@@ -13,6 +13,7 @@ import { Rectangle, RectangleHandlers, RectanglePoints } from './components/rect
 import { HtmlMarker, HtmlMarkerHandlers } from './components/marker_html';
 import { MarkerWithTooltip, MarkerWithTooltipHandlers } from './components/marker_with_tooltip';
 import DrawManager from './components/draw_manager';
+import EditManager from './components/edit_manager';
 import Cluster from './components/markers_cluster';
 declare type LngLat = [number, number];
 interface ContainerProps extends BaseFigureOptions<DGMap> {
@@ -27,4 +28,4 @@ interface ContainerProps extends BaseFigureOptions<DGMap> {
     centerControls?: boolean;
 }
 declare function ItisDGisContainer(props: ContainerProps): JSX.Element;
-export { useDGisMap, ItisDGisContainer, MapHandlers, LngLat, Marker, MarkerHandlers, HtmlMarker, HtmlMarkerHandlers, Polyline, PolylineHandlers, MarkerWithTooltip, MarkerWithTooltipHandlers, Circle, CircleHandlers, CirclePoints, Polygon, PolygonHandlers, Rectangle, RectangleHandlers, RectanglePoints, Cluster, DrawManager, allFigures, createBoundTuple };
+export { useDGisMap, ItisDGisContainer, MapHandlers, LngLat, Marker, MarkerHandlers, HtmlMarker, HtmlMarkerHandlers, Polyline, PolylineHandlers, MarkerWithTooltip, MarkerWithTooltipHandlers, Circle, CircleHandlers, CirclePoints, Polygon, PolygonHandlers, Rectangle, RectangleHandlers, RectanglePoints, Cluster, DrawManager, EditManager, allFigures, createBoundTuple, destructBoundTuple, Bound };

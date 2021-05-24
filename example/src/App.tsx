@@ -10,7 +10,9 @@ import {
    Rectangle,
    Cluster,
    DrawManager,
-   allFigures
+   allFigures,
+   Bound,
+   EditManager
 } from 'itis-dgis';
 import { Bar } from './components/Debug/Bar';
 import CarMarkers from './components/CarMarkers';
@@ -31,13 +33,7 @@ import {
 
 import { head, last } from 'lodash';
 
-export interface CarMarkerPoint {
-   lat: number;
-   lng?: number;
-   lon?: number;
-}
-
-export interface CarMarkerPointWithName extends CarMarkerPoint {
+export interface CarMarkerPointWithName extends Bound {
    name: string;
 }
 
@@ -56,6 +52,10 @@ function App(): JSX.Element {
    const [ drawManagerInit, setDrawManagerInit ] = React.useState(false);
    const [ drawManagerFigure, setDrawManagerFigure ] = React.useState(allFigures.Circle);
    const [ drawManagerData, setDrawManagerData ] = React.useState(null);
+
+   const [ editManagerInit, setEditManagerInit ] = React.useState(false);
+   const [ editManagerFigure, setEditManagerFigure ] = React.useState(allFigures.Circle);
+   const [ editManagerData, setEditManagerData ] = React.useState(null);
 
    const mapHandlers = React.useMemo(
       (): MapHandlers => ({
@@ -87,6 +87,9 @@ function App(): JSX.Element {
             setDrawManagerFigure={ setDrawManagerFigure }
             setDrawManagerData={ setDrawManagerData }
             setCarMarkers={ setCarMarkers }
+            setEditManager={ setEditManagerInit }
+            setEditManagerData={ setEditManagerData }
+            setEditManagerFigure={ setEditManagerFigure }
          />
          { showMap && (
             <ItisDGisContainer
@@ -150,6 +153,15 @@ function App(): JSX.Element {
                   <DrawManager
                      figureType={ drawManagerFigure }
                      setData={ setDrawManagerData }
+                  />
+               ) }
+               { editManagerInit && editManagerData && (
+                  <EditManager
+                     figureType={ editManagerFigure }
+                     figureData={ editManagerData! }
+                     setData={ setEditManagerData }
+                     destructPolygon
+                     destructPolyline
                   />
                ) }
             </ItisDGisContainer>
