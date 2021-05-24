@@ -15,8 +15,8 @@ interface TooltipProps {
         showTip?: boolean;
         padding?: Property.Padding;
         cursor?: Property.Cursor;
-        throwCreate?: HtmlMarkerOptions['throwCreate'];
-        throwDestroy?: HtmlMarkerOptions['throwDestroy'];
+        onCreate?: HtmlMarkerOptions['onCreate'];
+        onDestroy?: HtmlMarkerOptions['onDestroy'];
         textTransform?: Property.TextTransform;
         textAlign?: Property.TextAlign;
         fontWeight?: Property.FontWeight;
