@@ -41,17 +41,13 @@ export function Polyline(props: PolylineOptions): null {
                });
             }
 
-            if (props.throwCreate) {
-               props.throwCreate(polyline);
-            }
+            if (props.onCreate) props.onCreate(polyline);
          });
       }
 
       return () => {
          if (polyline) {
-            if (props.throwDestroy) {
-               props.throwDestroy(polyline);
-            }
+            if (props.onDestroy) props.onDestroy(polyline);
             polyline.destroy();
          }
       }

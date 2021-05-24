@@ -44,17 +44,17 @@ export function HtmlMarker(props: HtmlMarkerOptions): null {
                });
 
                if (props.handlers.close) {
-                  html.querySelector('#closeButton')?.addEventListener('click', () => props.handlers!.close)
+                  html.querySelector('#closeButton')?.addEventListener('click', () => props.handlers!.close!())
                }
             }
 
-            if (props.throwCreate) props.throwCreate(marker);
+            if (props.onCreate) props.onCreate(marker);
          });
       }
 
       return () => {
          if (marker) {
-            if (props.throwDestroy) props.throwDestroy(marker);
+            if (props.onDestroy) props.onDestroy(marker);
             marker.destroy();
          }
       }

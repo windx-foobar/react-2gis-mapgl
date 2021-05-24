@@ -61,20 +61,13 @@ export function Rectangle(props: RectangleOptions): null {
                });
             }
 
-            if (props.throwCreate) {
-               props.throwCreate(rectangle);
-            }
-
-
+            if (props.onCreate) props.onCreate(rectangle);
          });
       }
 
       return () => {
          if (rectangle) {
-            if (props.throwDestroy) {
-               props.throwDestroy(rectangle);
-            }
-
+            if (props.onDestroy) props.onDestroy(rectangle);
             rectangle.destroy();
          }
       }

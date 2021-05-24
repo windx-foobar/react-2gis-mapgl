@@ -20,8 +20,8 @@ interface TooltipProps {
       showTip?: boolean,
       padding?: Property.Padding,
       cursor?: Property.Cursor,
-      throwCreate?: HtmlMarkerOptions['throwCreate'],
-      throwDestroy?: HtmlMarkerOptions['throwDestroy'],
+      onCreate?: HtmlMarkerOptions['onCreate'],
+      onDestroy?: HtmlMarkerOptions['onDestroy'],
       textTransform?: Property.TextTransform,
       textAlign?: Property.TextAlign,
       fontWeight?: Property.FontWeight,
@@ -77,8 +77,8 @@ export function MarkerWithTooltip(props: MarkerWithTooltipProps) {
             handlers={ {
                click: (e) => props.tooltipHandlers?.click(e, setShowTooltip)
             } }
-            throwCreate={ props.throwCreate }
-            throwDestroy={ props.throwDestroy }
+            onCreate={ props.onCreate }
+            onDestroy={ props.onDestroy }
          />
          { showTooltip && (
             <HtmlMarker

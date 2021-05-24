@@ -43,9 +43,7 @@ export function Marker(props: MarkerOptions): null {
                });
             }
 
-            if (props.throwCreate) {
-               props.throwCreate(marker);
-            }
+            if (props.onCreate) props.onCreate(marker);
          });
       }
 
@@ -53,9 +51,7 @@ export function Marker(props: MarkerOptions): null {
          if (marker) {
             marker.destroy();
 
-            if (props.throwDestroy) {
-               props.throwDestroy(marker);
-            }
+            if (props.onDestroy) props.onDestroy(marker);
          }
       }
    }, [ map, props.coordinates[0], props.coordinates[1] ]);

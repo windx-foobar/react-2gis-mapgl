@@ -50,17 +50,13 @@ export function Polygon(props: PolygonOptions): null {
                });
             }
 
-            if (props.throwCreate) {
-               props.throwCreate(polygon);
-            }
+            if (props.onCreate) props.onCreate(polygon);
          });
       }
 
       return () => {
          if (polygon) {
-            if (props.throwDestroy) {
-               props.throwDestroy(polygon);
-            }
+            if (props.onDestroy) props.onDestroy(polygon);
 
             polygon.destroy();
          }

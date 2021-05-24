@@ -8,7 +8,7 @@ import {
 
 import { useDGisMap } from '../contexts_hooks';
 import { defaults } from '../constants/defaults';
-import { MapEventTable as DGMapEventTable } from '@2gis/mapgl/types/types/events';
+import { BaseFigureOptions } from '../interfaces/base_figure_options';
 
 export type CircleHandlers = {
    [P in keyof DGDynamicObjectEventTable]?: (e: DGDynamicObjectEventTable[P]) => any | void;
@@ -19,7 +19,9 @@ export type CirclePoints = {
    coordinates: DGCircleOptions['coordinates'];
 }
 
-interface CircleOptions extends DGCircleOptions {
+type BaseCircleOptions = DGCircleOptions & BaseFigureOptions<DGCircle>;
+
+interface CircleOptions extends BaseCircleOptions {
    handlers?: CircleHandlers;
 }
 
@@ -45,10 +47,17 @@ export function Circle(props: CircleOptions): null {
                   circle.on(event, props.handlers![event]!);
                });
             }
+
+            if (props.onCreate) props.onCreate(circle);
          });
       }
 
-      return () => map && circle && circle.destroy();
+      return () => {
+         if (circle) {
+            circle.destroy();
+            if (props.onDestroy) props.onDestroy(circle);
+         }
+      }
    }, [ map, props.coordinates, props.handlers, props.radius ]);
 
    return null;

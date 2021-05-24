@@ -6,6 +6,7 @@ import { useDGisMap, ItisDGisProvider } from './contexts_hooks';
 import defaults from './constants/defaults';
 import * as allFigures from './constants/figures';
 import { createBoundTuple } from './helpers';
+import { BaseFigureOptions } from './interfaces/base_figure_options';
 
 // Library Components
 import { EventHandlers, MapHandlers } from './handlers';
@@ -26,7 +27,7 @@ import useStyles from './index.style';
 
 type LngLat = [ number, number ];
 
-interface ContainerProps {
+interface ContainerProps extends BaseFigureOptions<DGMap> {
    center?: LngLat | number[];
    zoom?: number;
    locale?: 'ru' | 'en';
@@ -36,8 +37,6 @@ interface ContainerProps {
    fullSize?: boolean;
    hiddenCopy?: boolean;
    centerControls?: boolean;
-   throwDestroy?: (map: DGMap | undefined) => any;
-   throwCreate?: (map: DGMap | undefined) => any;
 }
 
 const ItisDGisMapContainer = React.memo(
@@ -89,7 +88,7 @@ function ItisDGisContainer(props: ContainerProps): JSX.Element {
             }
          }
 
-         if (props.throwCreate) props.throwCreate(_map);
+         if (props.onCreate) props.onCreate(_map);
 
          // @ts-ignore
          setMap(_map);
@@ -104,7 +103,7 @@ function ItisDGisContainer(props: ContainerProps): JSX.Element {
             setMap(undefined);
          }
 
-         if (props.throwDestroy) props.throwDestroy(_map);
+         if (props.onDestroy) props.onDestroy(_map);
       }
    }, []);
 

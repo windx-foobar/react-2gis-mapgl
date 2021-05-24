@@ -7,8 +7,11 @@ import {
 } from '@2gis/mapgl-clusterer';
 
 import { useDGisMap } from '../contexts_hooks';
+import { BaseFigureOptions } from '../interfaces/base_figure_options';
 
-interface ClusterOptions extends ClustererOptions {
+type BaseClustererOptions = ClustererOptions & BaseFigureOptions<Clusterer>;
+
+interface ClusterOptions extends BaseClustererOptions {
    radius: number;
    markers: InputMarker[];
    clusterStyle?: ClusterStyle
@@ -27,9 +30,17 @@ export function Cluster(props: ClusterOptions): null {
          });
 
          clusterer.load(props.markers);
+
+         if (props.onCreate) props.onCreate(clusterer);
       }
 
-      return () => map && clusterer && clusterer.destroy();
+      return () => {
+         if (clusterer) {
+            clusterer.destroy();
+
+            if (props.onDestroy) props.onDestroy(clusterer);
+         }
+      }
    }, [ map, props.markers, props.radius ]);
 
    return null;
