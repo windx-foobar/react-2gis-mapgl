@@ -4,3 +4,4 @@ export interface Bound {
     lng?: number;
 }
 export declare function createBoundTuple(bound: Bound): [number, number];
+export declare function destructBoundTuple(tupleBound: [number, number] | number[], lngMode?: boolean): Bound;
