@@ -327,7 +327,7 @@ export function DrawManager(props: DrawManagerProps) {
                { showMarkers && polylineModel.map((model, idx, models) => (
                   <HtmlMarker
                      coordinates={ model }
-                     html={ ReactDOMServer.renderToString(<HtmlMarkerHtml />) }
+                     html={ ReactDOMServer.renderToString(<HtmlMarkerHtml last={ idx === models.length - 1 } />) }
                      handlers={ idx === models.length - 1 ? lineLastMarkerHandlers : undefined }
                      key={ model[0] + model[1] }
                   />
@@ -340,7 +340,7 @@ export function DrawManager(props: DrawManagerProps) {
                { showMarkers && polygonModel.map((model, idx, models) => (
                   <HtmlMarker
                      coordinates={ model }
-                     html={ ReactDOMServer.renderToString(<HtmlMarkerHtml />) }
+                     html={ ReactDOMServer.renderToString(<HtmlMarkerHtml last={ idx === models.length - 1 } />) }
                      handlers={ idx === models.length - 1 ? lineLastMarkerHandlers : undefined }
                      key={ model[0] + model[1] }
                   />
