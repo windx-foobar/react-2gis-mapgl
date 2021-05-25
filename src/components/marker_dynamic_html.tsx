@@ -22,7 +22,7 @@ export interface HtmlMarkerOptions extends BaseHtmlMarkerOptions {
    handlers?: HtmlMarkerHandlers
 }
 
-export function HtmlMarker(props: HtmlMarkerOptions): null {
+export function HtmlDynamicMarker(props: HtmlMarkerOptions): null {
    const map = useDGisMap();
 
    React.useEffect(() => {
@@ -63,4 +63,4 @@ export function HtmlMarker(props: HtmlMarkerOptions): null {
    return null;
 }
 
-export default HtmlMarker;
+export default HtmlDynamicMarker;
