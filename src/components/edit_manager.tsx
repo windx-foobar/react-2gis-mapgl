@@ -247,7 +247,16 @@ export function EditManager(props: EditManagerProps) {
                break;
             case allFigures.Polygon:
                setPolygonCreate(true);
-               setPolygonModel(() => props.figureData!.points!.map(bound => createBoundTuple(bound)));
+               let points = props.figureData!.points!.map(bound => createBoundTuple(bound));
+               let [ first, last ] = [ points[0], points[points.length - 1] ];
+
+               if (first[0] === last[0] && first[1] === last[1]) {
+                  setPolygonModel(() => points.filter(
+                     (_, idx, all) => idx !== all.length - 1)
+                  );
+               } else {
+                  setPolygonModel(() => points);
+               }
                break;
             case allFigures.Polyline:
                setPolylineCreate(true);
