@@ -45,8 +45,8 @@ export function HtmlMarkerHtml(props: { last?: boolean }): JSX.Element {
          <div
             style={ {
                backgroundColor: 'white',
-               width: '20px',
-               height: '20px',
+               width: '25px',
+               height: '25px',
                cursor: 'pointer',
                border: '3px solid #0081F2',
                borderRadius: '100%',
@@ -56,8 +56,8 @@ export function HtmlMarkerHtml(props: { last?: boolean }): JSX.Element {
             <div
                style={ {
                   backgroundColor: 'white',
-                  width: '12px',
-                  height: '12px',
+                  width: '15px',
+                  height: '15px',
                   cursor: 'pointer',
                   border: '2px solid #0081F2',
                   borderRadius: '100%',
@@ -72,8 +72,8 @@ export function HtmlMarkerHtml(props: { last?: boolean }): JSX.Element {
       <div
          style={ {
             backgroundColor: 'white',
-            width: '20px',
-            height: '20px',
+            width: '25px',
+            height: '25px',
             cursor: 'pointer',
             border: '3px solid #0081F2',
             borderRadius: '100%',
