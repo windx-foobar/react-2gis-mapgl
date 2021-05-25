@@ -15,6 +15,7 @@ interface EditManagerProps {
     destructPolyline?: boolean;
     destructCircle?: boolean;
     destructPolygon?: boolean;
+    onUpdate?: (message: string) => any;
 }
 export declare function EditManager(props: EditManagerProps): JSX.Element;
 export default EditManager;

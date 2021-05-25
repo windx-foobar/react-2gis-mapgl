@@ -1,12 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom/server';
-import { CarMarkerPoint } from '../App';
-import { Polyline, MarkerWithTooltip, MarkerWithTooltipHandlers, HtmlMarker } from 'itis-dgis';
+import { Polyline, MarkerWithTooltip, MarkerWithTooltipHandlers, HtmlMarker, Bound } from 'itis-dgis';
 
 interface TrackProps {
-   wayPoints?: CarMarkerPoint[];
-   firstPoint?: CarMarkerPoint;
-   lastPoint?: CarMarkerPoint;
+   wayPoints?: Bound[];
+   firstPoint?: Bound;
+   lastPoint?: Bound;
 }
 
 const tooltipSettings = {

@@ -153,6 +153,7 @@ function App(): JSX.Element {
                   <DrawManager
                      figureType={ drawManagerFigure }
                      setData={ setDrawManagerData }
+                     onCreate={ message => console.log(message) }
                   />
                ) }
                { editManagerInit && editManagerData && (
@@ -160,6 +161,8 @@ function App(): JSX.Element {
                      figureType={ editManagerFigure }
                      figureData={ editManagerData! }
                      setData={ setEditManagerData }
+                     onUpdate={ message => console.log(message) }
+                     destructCircle
                      destructPolygon
                      destructPolyline
                   />

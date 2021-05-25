@@ -6,6 +6,7 @@ export interface DrawManagerProps {
     destructPolyline?: boolean;
     destructCircle?: boolean;
     destructPolygon?: boolean;
+    onCreate?: (message: string) => any;
 }
 export declare const initialCircle: CirclePoints;
 export declare function HtmlCircleMarkerHtml(): JSX.Element;

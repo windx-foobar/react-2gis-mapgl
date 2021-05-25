@@ -29,6 +29,7 @@ interface EditManagerProps {
    destructPolyline?: boolean;
    destructCircle?: boolean;
    destructPolygon?: boolean;
+   onUpdate?: (message: string) => any;
 }
 
 interface HtmlCustomHandlers extends Omit<HtmlMarkerHandlers, 'click'> {
@@ -122,10 +123,23 @@ export function EditManager(props: EditManagerProps) {
             } else {
                props.setData(circleModel);
             }
+
+            if (props.onUpdate) props.onUpdate('Круг успешно отредактирован');
          },
-         wheel() {
+         wheel(e) {
+            e.preventDefault();
+            let down = e.deltaY > 0;
+
             setCircleModel(model => {
                let newRadius = model.radius / 100;
+
+               if (down) {
+                  let newVal = model.radius - (newRadius > 500 ? newRadius : 500);
+                  return {
+                     ...model,
+                     radius: newVal <= 100 ? 100 : newVal
+                  }
+               }
 
                return {
                   ...model,
@@ -170,6 +184,8 @@ export function EditManager(props: EditManagerProps) {
                      points: [ ...polygonModel, polygonModel[0] ]
                         .map(bound => props.destructPolygon ? destructBoundTuple(bound) : bound)
                   });
+
+                  if (props.onUpdate) props.onUpdate('Полигон успешно отредактирован');
                   return true;
                }
 
@@ -177,6 +193,8 @@ export function EditManager(props: EditManagerProps) {
                   points: polylineModel
                      .map(bound => props.destructPolyline ? destructBoundTuple(bound) : bound)
                });
+
+               if (props.onUpdate) props.onUpdate('Линия успешно отредактирована');
                return true;
             }
 
@@ -288,6 +306,7 @@ export function EditManager(props: EditManagerProps) {
                         coordinates={ circleModel.coordinates }
                         html={ ReactDOMServer.renderToString(<HtmlCircleMarkerHtml />) }
                         handlers={ circleCenterMarkerHandlers }
+                        zIndex={ 300 }
                      />
                   </React.Fragment>
                ) }

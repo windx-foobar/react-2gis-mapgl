@@ -15,6 +15,7 @@ export interface DrawManagerProps {
    destructPolyline?: boolean;
    destructCircle?: boolean;
    destructPolygon?: boolean;
+   onCreate?: (message: string) => any;
 }
 
 export const initialCircle: CirclePoints = {
@@ -178,10 +179,23 @@ export function DrawManager(props: DrawManagerProps) {
          } else {
             props.setData(circleModel);
          }
+
+         if (props.onCreate) props.onCreate('Круг успешно создан');
       },
-      wheel() {
+      wheel(e) {
+         e.preventDefault();
+         let down = e.deltaY > 0;
+
          setCircleModel(model => {
             let newRadius = model.radius / 100;
+
+            if (down) {
+               let newVal = model.radius - (newRadius > 500 ? newRadius : 500);
+               return {
+                  ...model,
+                  radius: newVal <= 100 ? 100 : newVal
+               }
+            }
 
             return {
                ...model,
@@ -221,6 +235,7 @@ export function DrawManager(props: DrawManagerProps) {
                      points: [ ...polygonModel, polygonModel[0] ]
                         .map(bound => props.destructPolygon ? destructBoundTuple(bound) : bound)
                   });
+                  if (props.onCreate) props.onCreate('Полигон успешно создан');
                   return true;
                }
 
@@ -228,6 +243,7 @@ export function DrawManager(props: DrawManagerProps) {
                   points: polylineModel
                      .map(bound => props.destructPolyline ? destructBoundTuple(bound) : bound)
                });
+               if (props.onCreate) props.onCreate('Линия успешно создана');
                return true;
             }
 
