@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { Circle, CirclePoints, CircleHandlers } from './circle';
 import { HtmlMarker, HtmlMarkerHandlers } from './marker_html';
+import HtmlDynamicMarker from './marker_dynamic_html';
 import Polyline from './polyline';
 import Polygon from './polygon';
 import * as allFigures from '../constants/figures';
@@ -308,7 +309,7 @@ export function DrawManager(props: DrawManagerProps) {
             <React.Fragment>
                { showMarkers && circleModel.radius && (
                   <React.Fragment>
-                     <HtmlMarker
+                     <HtmlDynamicMarker
                         coordinates={ circleModel.coordinates }
                         html={ ReactDOMServer.renderToString(<HtmlCircleMarkerHtml />) }
                         handlers={ circleCenterMarkerHandlers }
@@ -325,7 +326,7 @@ export function DrawManager(props: DrawManagerProps) {
          { polylineCreate && !!polylineModel[0].filter(lngLat => lngLat > 0).length && (
             <React.Fragment>
                { showMarkers && polylineModel.map((model, idx, models) => (
-                  <HtmlMarker
+                  <HtmlDynamicMarker
                      coordinates={ model }
                      html={ ReactDOMServer.renderToString(<HtmlMarkerHtml last={ idx === models.length - 1 } />) }
                      handlers={ idx === models.length - 1 ? lineLastMarkerHandlers : undefined }
@@ -338,7 +339,7 @@ export function DrawManager(props: DrawManagerProps) {
          { polygonCreate && !!polygonModel[0].filter(lngLat => lngLat > 0).length && (
             <React.Fragment>
                { showMarkers && polygonModel.map((model, idx, models) => (
-                  <HtmlMarker
+                  <HtmlDynamicMarker
                      coordinates={ model }
                      html={ ReactDOMServer.renderToString(<HtmlMarkerHtml last={ idx === models.length - 1 } />) }
                      handlers={ idx === models.length - 1 ? lineLastMarkerHandlers : undefined }
