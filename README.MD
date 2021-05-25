@@ -1,13 +1,13 @@
-# ITIS-DGIS
+# REACT-2GIS-MAPGL
 
-Install
+Установка
 
 ```
-clone to your folder
+Склонируйте репозиторий в свою папку
 git clone https://github.com/windx-foobar/itis-dgis.git
 ```
 
-Usage
+Использование
 
 ```
 UMD: import { ... } from '<your_path>';
