@@ -7,7 +7,7 @@ export interface MarkerWithTooltipHandlers {
 }
 interface TooltipProps {
     tooltip: {
-        text: string;
+        text: string | null;
         minWidth?: Property.MinWidth;
         maxWidth?: Property.MaxWidth;
         offsetTop?: string;
