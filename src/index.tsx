@@ -60,40 +60,38 @@ function ItisDGisContainer(props: ContainerProps): JSX.Element {
          throw new Error('Api key is required prop value!');
       }
 
-      if (!document.querySelector('#map-container')) {
-         throw new Error('Map required is #map-container');
-      }
-
-      load().then((mapgl) => {
-         _map = new mapgl.Map('map-container', {
-            center: props.center ?? defaults.map.center,
-            zoom: props.zoom ?? defaults.map.zoom,
-            key: props.apiKey,
-            lang: props.locale ?? defaults.map.lang,
-            zoomControl: false
-         });
-
-         if (props.centerControls) {
-            zoomControl = new mapgl.ZoomControl(_map, {
-               position: 'topRight'
+      if (document.querySelector('#map-container')) {
+         load().then((mapgl) => {
+            _map = new mapgl.Map('map-container', {
+               center: props.center ?? defaults.map.center,
+               zoom: props.zoom ?? defaults.map.zoom,
+               key: props.apiKey,
+               lang: props.locale ?? defaults.map.lang,
+               zoomControl: false
             });
 
-            let $el: HTMLDivElement = zoomControl.getContainer();
-            // Центрируем контролсы зума +- по центру
-            $el.style.position = 'relative';
-            $el.style.top = props.fullSize ? '40vh' : '30vh';
+            if (props.centerControls) {
+               zoomControl = new mapgl.ZoomControl(_map, {
+                  position: 'topRight'
+               });
 
-            if (props.hiddenCopy) {
-               // Убираем копирайты 2гис
-               $el.parentElement?.nextElementSibling?.remove();
+               let $el: HTMLDivElement = zoomControl.getContainer();
+               // Центрируем контролсы зума +- по центру
+               $el.style.position = 'relative';
+               $el.style.top = props.fullSize ? '40vh' : '30vh';
+
+               if (props.hiddenCopy) {
+                  // Убираем копирайты 2гис
+                  $el.parentElement?.nextElementSibling?.remove();
+               }
             }
-         }
 
-         if (props.onCreate) props.onCreate(_map);
+            if (props.onCreate) props.onCreate(_map);
 
-         // @ts-ignore
-         setMap(_map);
-      });
+            // @ts-ignore
+            setMap(_map);
+         });
+      }
 
       return () => {
          if (_map) {

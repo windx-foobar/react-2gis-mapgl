@@ -4,6 +4,7 @@ import {
    ItisDGisContainer,
    MapHandlers,
    Marker,
+   MarkerWithTooltip,
    Polyline,
    Circle,
    Polygon,
@@ -37,8 +38,18 @@ export interface CarMarkerPointWithName extends Bound {
    name: string;
 }
 
+const tooltipSettings = {
+   minWidth: 'auto',
+   offsetTop: '-180%',
+   offsetLeft: '-50%',
+   showTip: false,
+   padding: '5px 10px',
+   cursor: 'pointer'
+}
+
 function App(): JSX.Element {
    const [ markers, setMarkers ] = React.useState(_markers);
+   const [ hasName, setHasName ] = React.useState<boolean>(false);
    const [ clusterMarkers, setClusterMarkers ] = React.useState(_clusterMarkers);
    const [ polylines, setPolylines ] = React.useState(_polylines);
    const [ circles, setCircles ] = React.useState(_circles);
@@ -109,9 +120,20 @@ function App(): JSX.Element {
                   firstPoint={ head(trackWayPoints) }
                   lastPoint={ last(trackWayPoints) }
                />*/ }
-               { markers.map((marker) => (
+               { !hasName && markers.map((marker) => (
                   <Marker
                      coordinates={ marker }
+                     key={ marker[0] + marker[1] }
+                  />
+               )) }
+               { hasName && markers.map((marker) => (
+                  <MarkerWithTooltip
+                     coordinates={ marker }
+                     tooltip={ {
+                        ...tooltipSettings,
+                        text: 'Any text',
+                        showTip: true
+                     } }
                      key={ marker[0] + marker[1] }
                   />
                )) }
