@@ -110,11 +110,17 @@ export function DrawManager(props: DrawManagerProps) {
             if (!showMarkers) return showMarkers;
 
             if (circleCreate) {
-               setCircleModel(model => ({
-                  ...model,
-                  coordinates: e.lngLat
-               }))
-               return true;
+               if (initFirstMarker) {
+                  setCircleModel(model => ({
+                     ...model,
+                     coordinates: e.lngLat
+                  }));
+
+                  setInitFirstMarker(false);
+                  return true;
+               }
+
+               return initFirstMarker;
             }
 
             if (polylineCreate) {

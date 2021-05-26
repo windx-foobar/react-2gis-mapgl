@@ -15,7 +15,7 @@
     "setVersion": "node bin/setVersion.js",
     "removeTrash": "node bin/removeTrash.js",
     "removeLib": "node bin/removeLib.js",
-    "buildAndPush": "yarn build:esm && yarn build:cjs && yarn setVersion && yarn removeTrash && git ci -a -m 'autogenerate' && git push github master"
+    "buildAndPush": "yarn build:esm && yarn build:cjs && yarn setVersion && yarn removeTrash && git ci -a -m 'hotfixes' && git push github master"
   },
   "devDependencies": {
     "@types/leaflet": "^1.7.0",
