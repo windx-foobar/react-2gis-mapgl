@@ -107,6 +107,8 @@ export function DrawManager(props: DrawManagerProps) {
    const mapHandlers = React.useMemo(
       (): MapHandlers => ({
          click(e) {
+            if (!showMarkers) return showMarkers;
+
             if (circleCreate) {
                setCircleModel(model => ({
                   ...model,
@@ -159,7 +161,8 @@ export function DrawManager(props: DrawManagerProps) {
          circleMoving,
          polylineCreate,
          polygonCreate,
-         initFirstMarker
+         initFirstMarker,
+         showMarkers
       ]
    );
 
@@ -299,7 +302,8 @@ export function DrawManager(props: DrawManagerProps) {
          circleMoving,
          polylineCreate,
          polygonCreate,
-         initFirstMarker
+         initFirstMarker,
+         showMarkers
       ]
    );
 

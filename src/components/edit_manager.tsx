@@ -59,13 +59,7 @@ export function EditManager(props: EditManagerProps) {
    const mapHandlers = React.useMemo(
       (): MapHandlers => ({
          click(e) {
-            if (circleCreate) {
-               setCircleModel(model => ({
-                  ...model,
-                  coordinates: e.lngLat
-               }))
-               return true;
-            }
+            if (!showMarkers) return showMarkers;
 
             if (polylineCreate) {
                setPolylineModel((model) => [ ...model, e.lngLat ]);
@@ -101,7 +95,8 @@ export function EditManager(props: EditManagerProps) {
          circleMoving,
          polylineCreate,
          polygonCreate,
-         initFirstMarker
+         initFirstMarker,
+         showMarkers
       ]
    );
 
@@ -279,7 +274,7 @@ export function EditManager(props: EditManagerProps) {
    React.useEffect(
       () => {
          if (map) {
-            map.once('click', mapHandlers.click!);
+            map.on('click', mapHandlers.click!);
 
             if (circleMoving) {
                map.on('mouseup', mapHandlers.mouseup!);
@@ -289,6 +284,7 @@ export function EditManager(props: EditManagerProps) {
 
          return () => {
             if (map) {
+               map.off('click', mapHandlers.click!);
                map.off('mouseup', mapHandlers.mouseup!);
                map.off('mousemove', mapHandlers.mousemove!);
             }
@@ -300,7 +296,8 @@ export function EditManager(props: EditManagerProps) {
          circleMoving,
          polylineCreate,
          polygonCreate,
-         initFirstMarker
+         initFirstMarker,
+         showMarkers
       ]
    );
 
