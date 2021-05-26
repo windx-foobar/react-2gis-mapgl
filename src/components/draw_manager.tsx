@@ -107,12 +107,20 @@ export function DrawManager(props: DrawManagerProps) {
    const mapHandlers = React.useMemo(
       (): MapHandlers => ({
          click(e) {
+            if (!showMarkers) return showMarkers;
+
             if (circleCreate) {
-               setCircleModel(model => ({
-                  ...model,
-                  coordinates: e.lngLat
-               }))
-               return true;
+               if (initFirstMarker) {
+                  setCircleModel(model => ({
+                     ...model,
+                     coordinates: e.lngLat
+                  }));
+
+                  setInitFirstMarker(false);
+                  return true;
+               }
+
+               return initFirstMarker;
             }
 
             if (polylineCreate) {
@@ -159,7 +167,8 @@ export function DrawManager(props: DrawManagerProps) {
          circleMoving,
          polylineCreate,
          polygonCreate,
-         initFirstMarker
+         initFirstMarker,
+         showMarkers
       ]
    );
 
@@ -287,7 +296,7 @@ export function DrawManager(props: DrawManagerProps) {
 
          return () => {
             if (map) {
-               map.off('click', mapHandlers.click!)
+               map.off('click', mapHandlers.click!);
                map.off('mouseup', mapHandlers.mouseup!);
                map.off('mousemove', mapHandlers.mousemove!);
             }
@@ -299,7 +308,8 @@ export function DrawManager(props: DrawManagerProps) {
          circleMoving,
          polylineCreate,
          polygonCreate,
-         initFirstMarker
+         initFirstMarker,
+         showMarkers
       ]
    );
 
