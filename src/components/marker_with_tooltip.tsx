@@ -12,7 +12,7 @@ export interface MarkerWithTooltipHandlers {
 
 interface TooltipProps {
    tooltip: {
-      text: string,
+      text: string | null,
       minWidth?: Property.MinWidth,
       maxWidth?: Property.MaxWidth,
       offsetTop?: string,
@@ -80,7 +80,7 @@ export function MarkerWithTooltip(props: MarkerWithTooltipProps) {
             onCreate={ props.onCreate }
             onDestroy={ props.onDestroy }
          />
-         { showTooltip && (
+         { props.tooltip.text && !!props.tooltip.text.trim().length && showTooltip && (
             <HtmlMarker
                coordinates={ props.coordinates }
                html={ ReactDOMServer.renderToString(<Tooltip tooltip={ props.tooltip } />) }
