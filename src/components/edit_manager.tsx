@@ -279,7 +279,7 @@ export function EditManager(props: EditManagerProps) {
    React.useEffect(
       () => {
          if (map) {
-            map.on('click', mapHandlers.click!);
+            map.once('click', mapHandlers.click!);
 
             if (circleMoving) {
                map.on('mouseup', mapHandlers.mouseup!);
@@ -289,7 +289,6 @@ export function EditManager(props: EditManagerProps) {
 
          return () => {
             if (map) {
-               map.off('click', mapHandlers.click!)
                map.off('mouseup', mapHandlers.mouseup!);
                map.off('mousemove', mapHandlers.mousemove!);
             }
